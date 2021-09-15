@@ -6,10 +6,6 @@
 
 namespace fs = std::filesystem;
 
-
-static const fs::path selLogDir = fs::current_path().root_path() / "var" / "log";
-static const fs::path selLogFilename = "ipmi_sel";
-
 class StorageManager {
 public:
     explicit StorageManager(fs::path storagePath);

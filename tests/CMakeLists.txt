@@ -16,7 +16,7 @@ add_executable(
         ../src/storage_manager.cpp
 
         storage_manager_test.cpp
-)
+        ../include/constants.hpp)
 target_link_libraries(tests gtest_main)
 
 # Adding tests
