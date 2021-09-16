@@ -25,3 +25,19 @@ TEST(StorageManager, PathsMatch) {
 
     ASSERT_EQ(manager.getPath(), selLogDir / selLogFilename);
 }
+
+TEST(StorageManager, Streams) {
+    StorageManager manager(selLogDir / selLogFilename);
+
+    auto stream = manager.getFileStream();
+
+    stream << "123";
+
+    std::string temp;
+    stream.seekg(0);
+    std::getline(stream, temp);
+
+    stream.close();
+
+    ASSERT_EQ(temp, "123");
+}
