@@ -3,6 +3,9 @@ project(storage_manager)
 
 set(CMAKE_CXX_STANDARD 20)
 
+# Options
+option(ENABLE_TESTS "Enables tests" OFF)
+
 add_executable(
         storage_manager
 
@@ -10,7 +13,8 @@ add_executable(
 
         src/storage_manager.cpp
         include/storage_manager.hpp
-        include/constants.hpp)
+        include/constants.hpp
+)
 
 set(INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(storage_manager PUBLIC ${INCLUDE_DIRECTORIES})
@@ -18,5 +22,8 @@ include_directories(storage_manager PUBLIC ${INCLUDE_DIRECTORIES})
 find_package(Boost 1.66 REQUIRED)
 include_directories(${BOOST_SRC_DIR})
 
-add_subdirectory(tests)
+if (ENABLE_TESTS)
+    add_subdirectory(tests)
+endif ()
+
 
