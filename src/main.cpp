@@ -1,26 +1,65 @@
+#include "constants.hpp"
+#include "storage_manager.hpp"
+
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/text_oarchive.hpp>
+
 #include <iostream>
 
-#include "storage_manager.hpp"
-#include "constants.hpp"
+struct SELEventRecord
+{
+    friend class boost::serialization::access;
 
-int main() {
-    StorageManager manager(selLogDir / selLogFilename);
+    template <class Archive>
+    void serialize(Archive& ar, const unsigned int version)
+    {
+        ar& recordID;
+        ar& recordType;
+        ar& timeStamp;
+        ar& generatorID;
+        ar& eventMsgRevision;
+        ar& sensorType;
+        ar& sensorNum;
+        ar& eventType;
+        ar& eventData[0];
+        ar& eventData[1];
+        ar& eventData[2];
+    }
 
-    //    auto out = manager.getFileStream();
-    //    out << "123" << std::endl << "321" << std::endl;
-    //    out.close();
+    uint16_t recordID;                //!< Record ID.
+    uint8_t recordType;               //!< Record Type.
+    uint32_t timeStamp;               //!< Timestamp.
+    uint16_t generatorID;             //!< Generator ID.
+    uint8_t eventMsgRevision;         //!< Event Message Revision.
+    uint8_t sensorType;               //!< Sensor Type.
+    uint8_t sensorNum;                //!< Sensor Number.
+    uint8_t eventType;                //!< Event Dir | Event Type.
+    std::array<uint8_t, 3> eventData; //!< Event Data
 
-    manager.clearStorage();
+    SELEventRecord(){};
+    SELEventRecord(uint16_t recordID, uint8_t recordType, uint32_t timeStamp,
+                   uint16_t generatorID, uint8_t eventMsgRevision,
+                   uint8_t sensorType, uint8_t sensorNum, uint8_t eventType,
+                   std::array<uint8_t, 3> eventData) :
+        recordID{recordID},
+        recordType{recordType}, timeStamp{timeStamp}, generatorID{generatorID},
+        eventMsgRevision{eventMsgRevision}, sensorType{sensorType},
+        sensorNum{sensorNum}, eventType{eventType}, eventData{eventData}
+    {}
+};
 
-    std::cout << "Path to file: " << selLogDir << std::endl;
-    std::cout << "Number of entries: " << manager.countEntries() << std::endl << std::endl;
+int main()
+{
+    StorageManager manager(dir / file_name);
+    std::cout << "Path to file: " << dir << std::endl;
 
-    std::cout << "Inside file: " << std::endl;
+    const SELEventRecord selEventRecord{1, 1, 1, 1, 1, 1, 1, 1, {1, 2, 3}};
 
-    auto in = manager.getFileStream();
-    std::string temp;
-    while (std::getline(in, temp)) {
-        std::cout << temp << std::endl;
+    auto stream = manager.getFileStream();
+
+    {
+        boost::archive::text_oarchive out_archive(stream);
+        out_archive << selEventRecord;
     }
 
     return 0;

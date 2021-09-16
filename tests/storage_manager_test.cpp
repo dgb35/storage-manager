@@ -1,33 +1,37 @@
-#include <filesystem>
-
-#include "storage_manager.hpp"
 #include "constants.hpp"
+#include "storage_manager.hpp"
+
+#include <filesystem>
 
 #include "gtest/gtest.h"
 
 namespace fs = std::filesystem;
 
-TEST(StorageManager, FileExist) {
-    StorageManager manager(selLogDir / selLogFilename);
+TEST(StorageManager, FileExist)
+{
+    StorageManager manager(dir / file_name);
 
-    ASSERT_TRUE(fs::exists(selLogDir / selLogFilename));
+    ASSERT_TRUE(fs::exists(dir / file_name));
 }
 
-TEST(StorageManager, ExistAfterClear) {
-    StorageManager manager(selLogDir / selLogFilename);
+TEST(StorageManager, ExistAfterClear)
+{
+    StorageManager manager(dir / file_name);
     manager.clearStorage();
 
-    ASSERT_TRUE(fs::exists(selLogDir / selLogFilename));
+    ASSERT_TRUE(fs::exists(dir / file_name));
 }
 
-TEST(StorageManager, PathsMatch) {
-    StorageManager manager(selLogDir / selLogFilename);
+TEST(StorageManager, PathsMatch)
+{
+    StorageManager manager(dir / file_name);
 
-    ASSERT_EQ(manager.getPath(), selLogDir / selLogFilename);
+    ASSERT_EQ(manager.getPath(), dir / file_name);
 }
 
-TEST(StorageManager, Streams) {
-    StorageManager manager(selLogDir / selLogFilename);
+TEST(StorageManager, Streams)
+{
+    StorageManager manager(dir / file_name);
 
     auto stream = manager.getFileStream();
 

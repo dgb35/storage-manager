@@ -2,18 +2,21 @@
 
 #include <boost/algorithm/string.hpp>
 
-#include <fstream>
 #include <cassert>
+#include <fstream>
 #include <utility>
 
-StorageManager::StorageManager(fs::path storagePath)
-        : _path{std::move(storagePath)}, _fileStream{} {
+StorageManager::StorageManager(fs::path storagePath) :
+    _path{std::move(storagePath)}, _fileStream{}, _maxSize{16000}
+{
     checkStorage();
 }
 
-size_t StorageManager::countEntries() {
+size_t StorageManager::countRecords()
+{
     size_t count = 0;
 
+    checkStorage();
     auto in = getFileStream();
 
     std::string temp;
@@ -25,14 +28,25 @@ size_t StorageManager::countEntries() {
     return count;
 }
 
-void StorageManager::clearStorage() {
+void StorageManager::clearStorage()
+{
     fs::remove(_path);
     checkStorage();
 }
 
-void StorageManager::checkStorage() {
-    if (!fs::exists(_path)) {
-        if (!fs::exists(_path.parent_path())) {
+void StorageManager::checkStorage()
+{
+    if (fs::exists(_path))
+    {
+        if (getStorageSize() >= _maxSize)
+        {
+            clearStorage();
+        }
+    }
+    else
+    {
+        if (!fs::exists(_path.parent_path()))
+        {
             fs::create_directories(_path.parent_path());
         }
         // Creating an empty file
@@ -41,15 +55,23 @@ void StorageManager::checkStorage() {
     }
 }
 
-fs::path StorageManager::getPath() const {
+fs::path StorageManager::getPath() const
+{
     return _path;
 }
 
-std::fstream &&StorageManager::getFileStream() {
+std::fstream&& StorageManager::getFileStream()
+{
+    // Close already opened stream to avoid errors
     if (_fileStream.is_open())
         _fileStream.close();
 
     _fileStream.open(_path, std::ios::in | std::ios::out | std::ios::app);
 
     return std::move(_fileStream);
+}
+
+size_t StorageManager::getStorageSize()
+{
+    return fs::file_size(_path);
 }
