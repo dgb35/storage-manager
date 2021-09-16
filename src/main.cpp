@@ -1,8 +1,8 @@
 #include "constants.hpp"
 #include "storage_manager.hpp"
 
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/binary_iarchive.hpp>
+#include <boost/archive/binary_oarchive.hpp>
 
 #include <iostream>
 
@@ -54,13 +54,27 @@ int main()
     std::cout << "Path to file: " << dir << std::endl;
 
     const SELEventRecord selEventRecord{1, 1, 1, 1, 1, 1, 1, 1, {1, 2, 3}};
+    SELEventRecord selEventRecord1;
 
-    auto stream = manager.getFileStream();
+    manager.clearStorage();
 
     {
-        boost::archive::text_oarchive out_archive(stream);
+        auto stream = manager.getFileStream();
+        boost::archive::binary_oarchive out_archive(
+            stream, boost::archive::no_header | boost::archive::no_tracking);
+        out_archive << selEventRecord;
+        out_archive << selEventRecord;
         out_archive << selEventRecord;
     }
+
+    {
+        auto stream = manager.getFileStream();
+        boost::archive::binary_iarchive in_archive(
+            stream, boost::archive::no_header | boost::archive::no_tracking);
+        in_archive >> selEventRecord1;
+    }
+
+    std::cout << selEventRecord1.recordID;
 
     return 0;
 }

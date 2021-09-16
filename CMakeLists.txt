@@ -19,8 +19,9 @@ add_executable(
 set(INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(storage_manager PUBLIC ${INCLUDE_DIRECTORIES})
 
-find_package(Boost 1.66 COMPONENTS serialization REQUIRED)
+find_package(Boost COMPONENTS serialization REQUIRED)
 include_directories(${BOOST_INCLUDE_DIR})
+target_link_libraries(storage_manager Boost::boost Boost::serialization)
 
 if (ENABLE_TESTS)
     add_subdirectory(tests)
