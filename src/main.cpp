@@ -11,7 +11,7 @@ struct SELEventRecord
     friend class boost::serialization::access;
 
     template <class Archive>
-    void serialize(Archive& ar, const unsigned int version)
+    void save(Archive& ar, const unsigned int version) const
     {
         ar& recordID;
         ar& recordType;
@@ -25,6 +25,22 @@ struct SELEventRecord
         ar& eventData[1];
         ar& eventData[2];
     }
+    template <class Archive>
+    void load(Archive& ar, const unsigned int version)
+    {
+        ar& recordID;
+        ar& recordType;
+        ar& timeStamp;
+        ar& generatorID;
+        ar& eventMsgRevision;
+        ar& sensorType;
+        ar& sensorNum;
+        ar& eventType;
+        ar& eventData[0];
+        ar& eventData[1];
+        ar& eventData[2];
+    }
+    BOOST_SERIALIZATION_SPLIT_MEMBER()
 
     uint16_t recordID;                //!< Record ID.
     uint8_t recordType;               //!< Record Type.
@@ -53,28 +69,36 @@ int main()
     StorageManager manager(dir / file_name);
     std::cout << "Path to file: " << dir << std::endl;
 
-    const SELEventRecord selEventRecord{1, 1, 1, 1, 1, 1, 1, 1, {1, 2, 3}};
-    SELEventRecord selEventRecord1;
-
     manager.clearStorage();
 
+    const SELEventRecord write{1, 2, 3, 4, 5, 6, 7, 8, {9, 10, 11}};
     {
         auto stream = manager.getFileStream();
         boost::archive::binary_oarchive out_archive(
             stream, boost::archive::no_header | boost::archive::no_tracking);
-        out_archive << selEventRecord;
-        out_archive << selEventRecord;
-        out_archive << selEventRecord;
+        out_archive << write;
     }
 
+    SELEventRecord read;
     {
         auto stream = manager.getFileStream();
         boost::archive::binary_iarchive in_archive(
             stream, boost::archive::no_header | boost::archive::no_tracking);
-        in_archive >> selEventRecord1;
+        in_archive >> read;
     }
 
-    std::cout << selEventRecord1.recordID;
+    std::cout << "SEL record:" << std::endl;
+    std::cout << read.recordID << std::endl;
+    std::cout << (int)read.recordType << std::endl;
+    std::cout << read.timeStamp << std::endl;
+    std::cout << read.generatorID << std::endl;
+    std::cout << (int)read.eventMsgRevision << std::endl;
+    std::cout << (int)read.sensorType << std::endl;
+    std::cout << (int)read.sensorNum << std::endl;
+    std::cout << (int)read.eventType << std::endl;
+    std::cout << (int)read.eventData[0] << std::endl;
+    std::cout << (int)read.eventData[1] << std::endl;
+    std::cout << (int)read.eventData[2] << std::endl;
 
     return 0;
 }
