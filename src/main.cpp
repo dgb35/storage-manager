@@ -25,6 +25,7 @@ struct SELEventRecord
         ar& eventData[1];
         ar& eventData[2];
     }
+
     template <class Archive>
     void load(Archive& ar, const unsigned int version)
     {
@@ -69,13 +70,16 @@ int main()
     StorageManager manager(dir / file_name);
     std::cout << "Path to file: " << dir << std::endl;
 
-    manager.clearStorage();
+    manager.clear_storage();
 
     const SELEventRecord write{1, 2, 3, 4, 5, 6, 7, 8, {9, 10, 11}};
     {
         auto stream = manager.file_stream();
         boost::archive::binary_oarchive out_archive(
             stream, boost::archive::no_header | boost::archive::no_tracking);
+        out_archive << write;
+        out_archive << write;
+        out_archive << write;
         out_archive << write;
     }
 
@@ -102,6 +106,5 @@ int main()
 
     std::cout << "SEL entry size: " << sizeof(SELEventRecord) << std::endl;
     std::cout << "Storage size: " << manager.storage_size() << std::endl;
-
     return 0;
 }

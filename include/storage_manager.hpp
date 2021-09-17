@@ -12,8 +12,8 @@ class StorageManager
   public:
     explicit StorageManager(fs::path storagePath);
 
-    void checkStorage();
-    void clearStorage();
+    void check_storage();
+    void clear_storage();
 
     [[nodiscard]] fs::path path() const;
     [[nodiscard]] std::fstream&& file_stream();

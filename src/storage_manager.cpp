@@ -9,14 +9,14 @@
 StorageManager::StorageManager(fs::path storagePath) :
     _path{std::move(storagePath)}, _fileStream{}, _maxSize{16000}
 {
-    checkStorage();
+    check_storage();
 }
 
 size_t StorageManager::count_records()
 {
     size_t count = 0;
 
-    checkStorage();
+    check_storage();
     auto in = file_stream();
 
     std::string temp;
@@ -28,19 +28,19 @@ size_t StorageManager::count_records()
     return count;
 }
 
-void StorageManager::clearStorage()
+void StorageManager::clear_storage()
 {
     fs::remove(_path);
-    checkStorage();
+    check_storage();
 }
 
-void StorageManager::checkStorage()
+void StorageManager::check_storage()
 {
     if (fs::exists(_path))
     {
         if (storage_size() >= _maxSize)
         {
-            clearStorage();
+            clear_storage();
         }
     }
     else
