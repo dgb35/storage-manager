@@ -15,11 +15,11 @@ class StorageManager
     void checkStorage();
     void clearStorage();
 
-    [[nodiscard]] fs::path getPath() const;
-    [[nodiscard]] std::fstream&& getFileStream();
+    [[nodiscard]] fs::path path() const;
+    [[nodiscard]] std::fstream&& file_stream();
 
-    [[nodiscard]] size_t getStorageSize();
-    [[nodiscard]] size_t countRecords();
+    [[nodiscard]] size_t storage_size();
+    [[nodiscard]] size_t count_records();
 
   protected:
     std::fstream _fileStream;

@@ -12,12 +12,12 @@ StorageManager::StorageManager(fs::path storagePath) :
     checkStorage();
 }
 
-size_t StorageManager::countRecords()
+size_t StorageManager::count_records()
 {
     size_t count = 0;
 
     checkStorage();
-    auto in = getFileStream();
+    auto in = file_stream();
 
     std::string temp;
     while (std::getline(in, temp))
@@ -38,7 +38,7 @@ void StorageManager::checkStorage()
 {
     if (fs::exists(_path))
     {
-        if (getStorageSize() >= _maxSize)
+        if (storage_size() >= _maxSize)
         {
             clearStorage();
         }
@@ -55,12 +55,12 @@ void StorageManager::checkStorage()
     }
 }
 
-fs::path StorageManager::getPath() const
+fs::path StorageManager::path() const
 {
     return _path;
 }
 
-std::fstream&& StorageManager::getFileStream()
+std::fstream&& StorageManager::file_stream()
 {
     // Close already opened stream to avoid errors
     if (_fileStream.is_open())
@@ -71,7 +71,7 @@ std::fstream&& StorageManager::getFileStream()
     return std::move(_fileStream);
 }
 
-size_t StorageManager::getStorageSize()
+size_t StorageManager::storage_size()
 {
     return fs::file_size(_path);
 }

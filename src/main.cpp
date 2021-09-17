@@ -73,7 +73,7 @@ int main()
 
     const SELEventRecord write{1, 2, 3, 4, 5, 6, 7, 8, {9, 10, 11}};
     {
-        auto stream = manager.getFileStream();
+        auto stream = manager.file_stream();
         boost::archive::binary_oarchive out_archive(
             stream, boost::archive::no_header | boost::archive::no_tracking);
         out_archive << write;
@@ -81,7 +81,7 @@ int main()
 
     SELEventRecord read;
     {
-        auto stream = manager.getFileStream();
+        auto stream = manager.file_stream();
         boost::archive::binary_iarchive in_archive(
             stream, boost::archive::no_header | boost::archive::no_tracking);
         in_archive >> read;
@@ -99,6 +99,9 @@ int main()
     std::cout << (int)read.eventData[0] << std::endl;
     std::cout << (int)read.eventData[1] << std::endl;
     std::cout << (int)read.eventData[2] << std::endl;
+
+    std::cout << "SEL entry size: " << sizeof(SELEventRecord) << std::endl;
+    std::cout << "Storage size: " << manager.storage_size() << std::endl;
 
     return 0;
 }
