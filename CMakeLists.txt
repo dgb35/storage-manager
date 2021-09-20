@@ -9,12 +9,12 @@ option(ENABLE_TESTS "Enables tests" OFF)
 add_executable(
         storage_manager
 
-        src/main.cpp
+        src/example/main.cpp
 
         src/storage_manager.cpp
         include/storage_manager.hpp
-        include/constants.hpp
-)
+        include/example/constants.hpp
+        include/example/sel_event_record.hpp)
 
 set(INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(storage_manager PUBLIC ${INCLUDE_DIRECTORIES})

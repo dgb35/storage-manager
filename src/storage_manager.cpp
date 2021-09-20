@@ -7,25 +7,9 @@
 #include <utility>
 
 StorageManager::StorageManager(fs::path storagePath) :
-    _path{std::move(storagePath)}, _fileStream{}, _maxSize{16000}
+    _path{std::move(storagePath)}, _maxSize{16000}
 {
-    check_storage();
-}
-
-size_t StorageManager::count_records()
-{
-    size_t count = 0;
-
-    check_storage();
-    auto in = file_stream();
-
-    std::string temp;
-    while (std::getline(in, temp))
-        ++count;
-
-    in.close();
-
-    return count;
+    initialize_storage();
 }
 
 void StorageManager::clear_storage()
@@ -45,13 +29,7 @@ void StorageManager::check_storage()
     }
     else
     {
-        if (!fs::exists(_path.parent_path()))
-        {
-            fs::create_directories(_path.parent_path());
-        }
-        // Creating an empty file
-        _fileStream.open(_path, std::ios::out);
-        _fileStream.close();
+        initialize_storage();
     }
 }
 
@@ -60,18 +38,31 @@ fs::path StorageManager::path() const
     return _path;
 }
 
-std::fstream&& StorageManager::file_stream()
+std::ifstream StorageManager::read_binary_file_stream()
 {
-    // Close already opened stream to avoid errors
-    if (_fileStream.is_open())
-        _fileStream.close();
-
-    _fileStream.open(_path, std::ios::in | std::ios::out | std::ios::app);
-
-    return std::move(_fileStream);
+    std::shared_lock lock(file_mutex);
+    std::ifstream read_stream(_path, std::ios::in | std::ios::binary);
+    return read_stream;
 }
 
-size_t StorageManager::storage_size()
+std::ofstream StorageManager::write_binary_file_stream()
+{
+    std::unique_lock lock(file_mutex);
+    std::ofstream write_stream(_path, std::ios::out | std::ios::app |
+                                          std::ios::binary);
+    return write_stream;
+}
+
+size_t StorageManager::storage_size() const
 {
     return fs::file_size(_path);
+}
+
+void StorageManager::initialize_storage()
+{
+    if (!fs::exists(_path.parent_path()))
+        fs::create_directories(_path.parent_path());
+
+    // Creating an empty file
+    write_binary_file_stream().close();
 }

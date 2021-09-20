@@ -1,9 +1,9 @@
 #ifndef STORAGE_MANAGER_STORAGE_MANAGER_HPP
 #define STORAGE_MANAGER_STORAGE_MANAGER_HPP
 
-#include <array>
 #include <filesystem>
 #include <fstream>
+#include <shared_mutex>
 
 namespace fs = std::filesystem;
 
@@ -16,13 +16,17 @@ class StorageManager
     void clear_storage();
 
     [[nodiscard]] fs::path path() const;
-    [[nodiscard]] std::fstream&& file_stream();
+    [[nodiscard]] size_t storage_size() const;
 
-    [[nodiscard]] size_t storage_size();
-    [[nodiscard]] size_t count_records();
+    [[nodiscard]] std::ofstream write_binary_file_stream();
+    [[nodiscard]] std::ifstream read_binary_file_stream();
 
   protected:
-    std::fstream _fileStream;
+    void initialize_storage();
+
+  protected:
+    std::shared_mutex file_mutex;
+
     fs::path _path;
     size_t _maxSize;
 };
