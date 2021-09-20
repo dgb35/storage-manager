@@ -17,7 +17,7 @@ int main()
     // how many entries will be written
     constexpr size_t count = 2;
 
-    const SelEventRecord write{1, 2, 3, 4, 5, 6, 7, 8, {9, 10, 11}};
+    const SelEventRecord record{1, 2, 3, 4, 5, 6, 7, 8, {9, 10, 11}};
 
     { // writing data
         auto stream = manager.write_binary_file_stream();
@@ -25,7 +25,7 @@ int main()
             stream, boost::archive::no_header | boost::archive::no_tracking);
 
         for (int i = 0; i < count; ++i)
-            out_archive << write;
+            out_archive << record;
     }
 
     std::vector<SelEventRecord> entries;

@@ -2,7 +2,6 @@
 
 #include <boost/algorithm/string.hpp>
 
-#include <cassert>
 #include <fstream>
 #include <utility>
 
