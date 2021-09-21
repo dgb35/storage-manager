@@ -131,7 +131,6 @@ template <typename Serializable>
 std::vector<Serializable> StorageManager<Serializable>::load_records()
 {
     return _serializer.load_all(read_binary_file_stream());
-    ;
 }
 
 #endif // STORAGE_MANAGER_STORAGE_MANAGER_HPP
