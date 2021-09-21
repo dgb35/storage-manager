@@ -13,6 +13,7 @@ class StorageManager
 {
   public:
     explicit StorageManager(fs::path storagePath);
+    virtual ~StorageManager() = default;
 
     void check_storage();
     void clear_storage();
@@ -47,7 +48,7 @@ StorageManager<Serializable>::StorageManager(fs::path storagePath) :
 template <typename Serializable>
 void StorageManager<Serializable>::clear_storage()
 {
-    archive_storage();
+    fs::remove(_path);
     check_storage();
 }
 
@@ -59,6 +60,7 @@ void StorageManager<Serializable>::check_storage()
         if (storage_size() >= _maxSize)
         {
             clear_storage();
+            archive_storage();
         }
     }
     else

@@ -12,6 +12,8 @@ add_executable(
 
         storage_manager_test.cpp
 
+        ../include/example/sel_storage_manager.hpp
+        ../src/example/sel_storage_manager.cpp
         ../include/storage_manager.hpp
         ../include/example/constants.hpp
         ../include/example/sel_event_record.hpp

@@ -1,18 +1,18 @@
 #include "example/constants.hpp"
 #include "example/sel_event_record.hpp"
-#include "storage_manager.hpp"
+#include "example/sel_storage_manager.hpp"
 
 #include <iostream>
 
 int main()
 {
-    StorageManager<SelEventRecord> manager(path / fileName);
+    SelStorageManager manager(path / fileName);
     std::cout << "Storage path: " << manager.path() << std::endl;
 
     manager.clear_storage();
 
     // how many entries will be written
-    constexpr size_t count = 5;
+    constexpr size_t count = 1;
 
     const SelEventRecord record{1, 2, 3, 4, 5, 6, 7, 8, {9, 10, 11}};
 
@@ -43,9 +43,8 @@ int main()
                   << std::endl;
     }
 
-
     constexpr auto sel_entry_size = sizeof(SelEventRecord);
     std::cout << "SEL entry size: " << sel_entry_size << std::endl;
-    std::cout << "Storage size: " << manager.storage_size()  << " (" << count << " * " << sel_entry_size << ")" << std::endl;
+    std::cout << "Storage size: " << manager.storage_size() << std::endl;
     return 0;
 }
