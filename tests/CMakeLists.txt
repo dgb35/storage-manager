@@ -12,11 +12,12 @@ FetchContent_MakeAvailable(googletest)
 add_executable(
         tests
 
-        ../include/storage_manager.hpp
-        ../src/storage_manager.cpp
-
         storage_manager_test.cpp
-        ../include/example/constants.hpp ../include/example/sel_event_record.hpp)
+
+        ../include/storage_manager.hpp
+        ../include/example/constants.hpp
+        ../include/example/sel_event_record.hpp
+)
 target_link_libraries(tests gtest_main)
 
 # Adding tests
