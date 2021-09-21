@@ -109,6 +109,9 @@ void StorageManager<Serializable>::initialize_storage()
 template <typename Serializable>
 void StorageManager<Serializable>::archive_storage()
 {
+    if (storage_size() == 0)
+        return;
+
     size_t i = 1;
     while (true)
     {

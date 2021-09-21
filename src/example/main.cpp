@@ -43,7 +43,9 @@ int main()
                   << std::endl;
     }
 
-    std::cout << "SEL entry size: " << 16 << std::endl;
-    std::cout << "Storage size: " << manager.storage_size() << std::endl;
+
+    constexpr auto sel_entry_size = sizeof(SelEventRecord);
+    std::cout << "SEL entry size: " << sel_entry_size << std::endl;
+    std::cout << "Storage size: " << manager.storage_size()  << " (" << count << " * " << sel_entry_size << ")" << std::endl;
     return 0;
 }
