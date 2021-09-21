@@ -10,7 +10,7 @@ namespace fs = std::filesystem;
 
 // constants
 static const auto path = fs::current_path().root_path() / "var" / "log";
-static const fs::path fileName = "ipmi_sel_test";
+static const auto fileName = "ipmi_sel_test";
 
 // tests
 TEST(StorageManager, FileExist)
