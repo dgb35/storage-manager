@@ -1,8 +1,7 @@
-#include "example/sel_event_record.hpp"
-#include "example/sel_storage_manager.hpp"
-#include "storage_manager.hpp"
-
-#include <example/sel_utils.hpp>
+#include <example/sel/sel_event_record.hpp>
+#include <example/sel/sel_storage_manager.hpp>
+#include <example/sel/sel_utils.hpp>
+#include <storage_manager.hpp>
 
 #include <filesystem>
 #include <thread>

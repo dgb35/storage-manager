@@ -1,7 +1,7 @@
 #ifndef STORAGE_MANAGER_SEL_STORAGE_MANAGER_HPP
 #define STORAGE_MANAGER_SEL_STORAGE_MANAGER_HPP
 
-#include "example/sel_event_record.hpp"
+#include "sel_event_record.hpp"
 #include "storage_manager.hpp"
 
 class SelStorageManager : public StorageManager<SelEventRecord>

@@ -1,6 +1,6 @@
 #include "example/constants.hpp"
-#include "example/sel_event_record.hpp"
-#include "example/sel_storage_manager.hpp"
+#include "example/sel/sel_event_record.hpp"
+#include "example/sel/sel_storage_manager.hpp"
 
 #include <iostream>
 
@@ -44,6 +44,7 @@ int main()
     }
 
     constexpr auto sel_entry_size = sizeof(SelEventRecord);
+
     std::cout << "SEL entry size: " << sel_entry_size << std::endl;
     std::cout << "Storage size: " << manager.storage_size() << std::endl;
     return 0;

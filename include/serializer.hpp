@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <vector>
+
 template <typename Object>
 struct Serializer
 {

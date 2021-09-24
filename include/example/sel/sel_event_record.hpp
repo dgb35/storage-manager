@@ -1,9 +1,6 @@
 #ifndef STORAGE_MANAGER_SEL_EVENT_RECORD_HPP
 #define STORAGE_MANAGER_SEL_EVENT_RECORD_HPP
 
-#include <boost/archive/binary_iarchive.hpp>
-#include <boost/archive/binary_oarchive.hpp>
-
 #include <array>
 
 struct SelEventRecord

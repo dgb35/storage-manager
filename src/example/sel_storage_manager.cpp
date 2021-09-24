@@ -1,6 +1,5 @@
-#include "example/sel_storage_manager.hpp"
-
-#include "example/sel_utils.hpp"
+#include <example/sel/sel_storage_manager.hpp>
+#include <example/sel/sel_utils.hpp>
 
 void SelStorageManager::delete_record(uint16_t id)
 {
@@ -23,7 +22,6 @@ void SelStorageManager::delete_record(uint16_t id)
         auto entry = std::find_if(
             entries.begin(), entries.end(),
             [id](const SelEventRecord& entry) { return entry.recordID == id; });
-
 
         if (entry != entries.end())
             entries.erase(entry);
@@ -61,7 +59,6 @@ SelEventRecord SelStorageManager::get_record(uint16_t id)
         auto entry = std::find_if(
             entries.begin(), entries.end(),
             [id](const SelEventRecord& entry) { return entry.recordID == id; });
-
 
         if (entry != entries.end())
             return *entry;

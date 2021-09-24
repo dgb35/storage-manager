@@ -11,13 +11,13 @@ add_executable(
 
         src/example/main.cpp
         src/example/sel_storage_manager.cpp
-
-        include/example/sel_utils.hpp
+        
         include/storage_manager.hpp
         include/serializer.hpp
         include/example/constants.hpp
-        include/example/sel_event_record.hpp
-        include/example/sel_storage_manager.hpp
+        include/example/sel/sel_utils.hpp
+        include/example/sel/sel_event_record.hpp
+        include/example/sel/sel_storage_manager.hpp
 )
 
 set(INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/include)
