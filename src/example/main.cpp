@@ -4,15 +4,15 @@
 
 #include <iostream>
 
+// how many entries will be written
+static constexpr size_t count = 1;
+
 int main()
 {
     SelStorageManager manager(path / fileName);
     std::cout << "Storage path: " << manager.path() << std::endl;
 
     manager.clear_storage();
-
-    // how many entries will be written
-    constexpr size_t count = 1;
 
     const SelEventRecord record{1, 2, 3, 4, 5, 6, 7, 8, {9, 10, 11}};
 

@@ -12,7 +12,7 @@ template <typename Serializable>
 class StorageManager
 {
   public:
-    explicit StorageManager(fs::path storagePath);
+    explicit StorageManager(fs::path storagePath, size_t maxSize = 16000);
     virtual ~StorageManager() = default;
 
     void check_storage();
@@ -39,8 +39,8 @@ class StorageManager
 };
 
 template <typename Serializable>
-StorageManager<Serializable>::StorageManager(fs::path storagePath) :
-    _path{std::move(storagePath)}, _maxSize{16000}
+StorageManager<Serializable>::StorageManager(fs::path storagePath, size_t maxSize) :
+    _path{std::move(storagePath)}, _maxSize{maxSize}
 {
     initialize_storage();
 }
@@ -59,8 +59,8 @@ void StorageManager<Serializable>::check_storage()
     {
         if (storage_size() >= _maxSize)
         {
-            clear_storage();
             archive_storage();
+            clear_storage();
         }
     }
     else
@@ -130,6 +130,7 @@ template <typename Serializable>
 void StorageManager<Serializable>::add_record(Serializable object)
 {
     _serializer.save(object, write_binary_file_stream());
+    check_storage();
 }
 
 template <typename Serializable>
