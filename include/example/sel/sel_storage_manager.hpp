@@ -3,7 +3,8 @@
 
 #include "sel_event_record.hpp"
 #include "storage_manager.hpp"
-
+namespace storage
+{
 class SelStorageManager : public StorageManager<SelEventRecord>
 {
   public:
@@ -24,5 +25,5 @@ class SelStorageManager : public StorageManager<SelEventRecord>
     uint16_t selReservationId;
     bool selReservationValid;
 };
-
+} // namespace storage
 #endif // STORAGE_MANAGER_SEL_STORAGE_MANAGER_HPP

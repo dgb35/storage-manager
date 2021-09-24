@@ -9,6 +9,7 @@
 #include "gtest/gtest.h"
 
 namespace fs = std::filesystem;
+using namespace storage;
 
 // constants
 static const auto path = fs::current_path().root_path() / "var" / "log";

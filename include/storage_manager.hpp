@@ -8,6 +8,9 @@
 #include <shared_mutex>
 namespace fs = std::filesystem;
 
+namespace storage
+{
+
 template <typename Serializable>
 class StorageManager
 {
@@ -153,5 +156,6 @@ uint16_t StorageManager<Serializable>::get_records_count() const
 {
     return _current_record_count;
 }
+} // namespace storage
 
 #endif // STORAGE_MANAGER_STORAGE_MANAGER_HPP

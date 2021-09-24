@@ -9,6 +9,8 @@ static constexpr size_t count = 10;
 
 int main()
 {
+    using namespace storage;
+    
     SelStorageManager manager(path / fileName);
     std::cout << "Storage path: " << manager.path() << std::endl;
 

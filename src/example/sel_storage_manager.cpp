@@ -1,6 +1,8 @@
 #include <example/sel/sel_storage_manager.hpp>
 #include <example/sel/sel_utils.hpp>
 
+namespace storage
+{
 void SelStorageManager::delete_record(uint16_t id)
 {
     auto entries = load_records();
@@ -65,7 +67,7 @@ SelEventRecord SelStorageManager::get_record(uint16_t id)
             return *entry;
         // TODO: report about wrong entry id
         else
-            return {};
+            return {ipmi::sel::invalidSelRecordId};
     }
 }
 
@@ -115,3 +117,4 @@ uint16_t SelStorageManager::get_reservation_id() const
     else
         return ipmi::sel::invalidSelReservationId;
 }
+} // namespace storage
