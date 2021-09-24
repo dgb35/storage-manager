@@ -102,8 +102,6 @@ TEST(SelStorageManager, GetFirstRecord)
     manager.add_record(record_1);
     manager.add_record(record_2);
 
-    manager.get_record(std::numeric_limits<uint16_t>::max());
-
     auto record = manager.get_record(ipmi::sel::firstEntry);
 
     ASSERT_EQ(record.recordId, record_1.recordId);
@@ -158,4 +156,77 @@ TEST(SelStorageManager, CountEntries)
     auto sel_count = manager.get_records_count();
 
     ASSERT_EQ(sel_count, count);
+}
+
+TEST(SelStorageManager, ReserveSel)
+{
+    SelStorageManager manager(path / fileName);
+    manager.clear_storage();
+
+    manager.reserve_sel();
+    manager.reserve_sel();
+    ASSERT_TRUE(manager.check_sel_reservation(2));
+}
+
+TEST(SelStorageManager, ReserveSelWithInvalidReservation)
+{
+    SelStorageManager manager(path / fileName);
+    manager.clear_storage();
+
+    manager.reserve_sel();
+    manager.reserve_sel();
+    manager.cancel_sel_reservation();
+    ASSERT_FALSE(manager.check_sel_reservation(2));
+}
+
+TEST(SelStorageManager, ReserveSelAfterAdd)
+{
+    SelStorageManager manager(path / fileName);
+    manager.clear_storage();
+
+    manager.reserve_sel();
+    SelEventRecord record{1};
+    manager.add_record(record);
+
+    ASSERT_FALSE(manager.check_sel_reservation(1));
+}
+
+TEST(SelStorageManager, ReserveSelAfterDelete)
+{
+    SelStorageManager manager(path / fileName);
+    manager.clear_storage();
+
+    manager.reserve_sel();
+    SelEventRecord record{1};
+    manager.delete_record(1);
+
+    ASSERT_FALSE(manager.check_sel_reservation(0));
+    ASSERT_FALSE(manager.check_sel_reservation(1));
+}
+
+TEST(SelStorageManager, ReserveSelAfterClearStorage)
+{
+    SelStorageManager manager(path / fileName);
+    manager.clear_storage();
+
+    manager.reserve_sel();
+    SelEventRecord record{1};
+    manager.add_record(record);
+
+    manager.clear_storage();
+
+    ASSERT_FALSE(manager.check_sel_reservation(0));
+    ASSERT_FALSE(manager.check_sel_reservation(1));
+}
+
+TEST(SelStorageManager, ReserveSelAfterCancel)
+{
+    SelStorageManager manager(path / fileName);
+    manager.clear_storage();
+
+    manager.reserve_sel();
+    manager.cancel_sel_reservation();
+    manager.reserve_sel();
+
+    ASSERT_TRUE(manager.check_sel_reservation(2));
 }

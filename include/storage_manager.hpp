@@ -16,12 +16,12 @@ class StorageManager
     virtual ~StorageManager() = default;
 
     void check_storage();
-    void clear_storage();
+    virtual void clear_storage();
 
     [[nodiscard]] fs::path path() const;
     [[nodiscard]] size_t storage_size() const;
 
-    void add_record(Serializable object);
+    virtual void add_record(Serializable object);
 
     [[nodiscard]] std::vector<Serializable> load_records();
     [[nodiscard]] uint16_t get_records_count() const;

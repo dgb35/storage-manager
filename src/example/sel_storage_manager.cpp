@@ -7,7 +7,10 @@ void SelStorageManager::delete_record(uint16_t id)
 
     // TODO: report about the empty storage
     if (entries.empty())
+    {
+        cancel_sel_reservation();
         return;
+    }
 
     if (id == ipmi::sel::firstEntry)
     {
@@ -67,5 +70,48 @@ SelEventRecord SelStorageManager::get_record(uint16_t id)
 }
 
 SelStorageManager::SelStorageManager(fs::path path, size_t maxSize) :
-    StorageManager(std::move(path), maxSize)
+    StorageManager(std::move(path), maxSize), selReservationId{0xFFFF},
+    selReservationValid{false}
 {}
+
+void SelStorageManager::cancel_sel_reservation()
+{
+    selReservationValid = false;
+}
+
+bool SelStorageManager::check_sel_reservation(uint16_t id) const
+{
+    return (selReservationValid && selReservationId == id);
+}
+
+uint16_t SelStorageManager::reserve_sel()
+{
+    // IPMI spec, Reservation ID, the value simply increases against each
+    // execution of the Reserve SEL command.
+    if (++selReservationId == 0)
+        selReservationId = 1;
+
+    selReservationValid = true;
+    return selReservationId;
+}
+
+void SelStorageManager::add_record(SelEventRecord object)
+{
+    // object.recordId = get_records_count();
+    StorageManager::add_record(object);
+    cancel_sel_reservation();
+}
+
+void SelStorageManager::clear_storage()
+{
+    StorageManager::clear_storage();
+    cancel_sel_reservation();
+}
+
+uint16_t SelStorageManager::get_reservation_id() const
+{
+    if (selReservationValid)
+        return selReservationId;
+    else
+        return ipmi::sel::invalidSelReservationId;
+}

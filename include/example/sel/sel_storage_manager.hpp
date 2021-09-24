@@ -10,8 +10,19 @@ class SelStorageManager : public StorageManager<SelEventRecord>
     explicit SelStorageManager(fs::path path, size_t maxSize = 16000);
 
   public:
+    void add_record(SelEventRecord object) override;
+    void clear_storage() override;
     void delete_record(uint16_t id);
-    SelEventRecord get_record(uint16_t id);
+    [[nodiscard]] SelEventRecord get_record(uint16_t id);
+    [[nodiscard]] uint16_t get_reservation_id() const;
+
+    uint16_t reserve_sel();
+    void cancel_sel_reservation();
+    [[nodiscard]] bool check_sel_reservation(uint16_t id) const;
+
+  protected:
+    uint16_t selReservationId;
+    bool selReservationValid;
 };
 
 #endif // STORAGE_MANAGER_SEL_STORAGE_MANAGER_HPP

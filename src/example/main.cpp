@@ -5,7 +5,7 @@
 #include <iostream>
 
 // how many entries will be written
-static constexpr size_t count = 1;
+static constexpr size_t count = 10;
 
 int main()
 {
@@ -23,7 +23,8 @@ int main()
     // loading data
     auto entries = manager.load_records();
 
-    std::cout << "Number of entries: " << entries.size() << std::endl
+    std::cout << "Number of entries: " << manager.get_records_count()
+              << std::endl
               << std::endl;
     std::cout << "SEL records" << std::endl << std::endl;
     for (const auto& entry : entries)
