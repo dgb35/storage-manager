@@ -21,7 +21,7 @@ void SelStorageManager::delete_record(uint16_t id)
     {
         auto entry = std::find_if(
             entries.begin(), entries.end(),
-            [id](const SelEventRecord& entry) { return entry.recordID == id; });
+            [id](const SelEventRecord& entry) { return entry.recordId == id; });
 
         if (entry != entries.end())
             entries.erase(entry);
@@ -33,9 +33,7 @@ void SelStorageManager::delete_record(uint16_t id)
     clear_storage();
 
     for (const auto& entry : entries)
-    {
         add_record(entry);
-    }
 }
 
 SelEventRecord SelStorageManager::get_record(uint16_t id)
@@ -58,7 +56,7 @@ SelEventRecord SelStorageManager::get_record(uint16_t id)
     {
         auto entry = std::find_if(
             entries.begin(), entries.end(),
-            [id](const SelEventRecord& entry) { return entry.recordID == id; });
+            [id](const SelEventRecord& entry) { return entry.recordId == id; });
 
         if (entry != entries.end())
             return *entry;
@@ -68,6 +66,6 @@ SelEventRecord SelStorageManager::get_record(uint16_t id)
     }
 }
 
-SelStorageManager::SelStorageManager(fs::path path) :
-    StorageManager(std::move(path))
+SelStorageManager::SelStorageManager(fs::path path, size_t maxSize) :
+    StorageManager(std::move(path), maxSize)
 {}

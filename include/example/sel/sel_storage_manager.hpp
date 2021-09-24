@@ -7,7 +7,7 @@
 class SelStorageManager : public StorageManager<SelEventRecord>
 {
   public:
-    explicit SelStorageManager(fs::path path);
+    explicit SelStorageManager(fs::path path, size_t maxSize = 16000);
 
   public:
     void delete_record(uint16_t id);

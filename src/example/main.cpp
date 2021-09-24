@@ -28,10 +28,10 @@ int main()
     std::cout << "SEL records" << std::endl << std::endl;
     for (const auto& entry : entries)
     {
-        std::cout << "recordID: " << entry.recordID << std::endl;
+        std::cout << "recordId: " << entry.recordId << std::endl;
         std::cout << "recordType: " << (int)entry.recordType << std::endl;
         std::cout << "timeStamp: " << entry.timeStamp << std::endl;
-        std::cout << "generatorID: " << entry.generatorID << std::endl;
+        std::cout << "generatorId: " << entry.generatorId << std::endl;
         std::cout << "eventMsgRevision: " << (int)entry.eventMsgRevision
                   << std::endl;
         std::cout << "sensorType: " << (int)entry.sensorType << std::endl;

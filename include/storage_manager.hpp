@@ -22,7 +22,9 @@ class StorageManager
     [[nodiscard]] size_t storage_size() const;
 
     void add_record(Serializable object);
+
     [[nodiscard]] std::vector<Serializable> load_records();
+    [[nodiscard]] uint16_t get_records_count() const;
 
   protected:
     [[nodiscard]] std::ofstream write_binary_file_stream();
@@ -36,19 +38,25 @@ class StorageManager
     std::shared_mutex _file_mutex;
     fs::path _path;
     size_t _maxSize;
+
+    uint16_t _current_record_count;
 };
 
 template <typename Serializable>
-StorageManager<Serializable>::StorageManager(fs::path storagePath, size_t maxSize) :
-    _path{std::move(storagePath)}, _maxSize{maxSize}
+StorageManager<Serializable>::StorageManager(fs::path storagePath,
+                                             size_t maxSize) :
+    _path{std::move(storagePath)},
+    _maxSize{maxSize}, _current_record_count{0}
 {
     initialize_storage();
+    _current_record_count = load_records().size();
 }
 
 template <typename Serializable>
 void StorageManager<Serializable>::clear_storage()
 {
     fs::remove(_path);
+    _current_record_count = 0;
     check_storage();
 }
 
@@ -130,6 +138,7 @@ template <typename Serializable>
 void StorageManager<Serializable>::add_record(Serializable object)
 {
     _serializer.save(object, write_binary_file_stream());
+    ++_current_record_count;
     check_storage();
 }
 
@@ -137,6 +146,12 @@ template <typename Serializable>
 std::vector<Serializable> StorageManager<Serializable>::load_records()
 {
     return _serializer.load_all(read_binary_file_stream());
+}
+
+template <typename Serializable>
+uint16_t StorageManager<Serializable>::get_records_count() const
+{
+    return _current_record_count;
 }
 
 #endif // STORAGE_MANAGER_STORAGE_MANAGER_HPP

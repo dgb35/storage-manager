@@ -37,6 +37,7 @@ TEST(StorageManager, PathsMatch)
 TEST(SelStorageManager, DeleteFirstRecord)
 {
     SelStorageManager manager(path / fileName);
+    manager.clear_storage();
 
     SelEventRecord record_1{1};
     SelEventRecord record_2{2};
@@ -48,12 +49,13 @@ TEST(SelStorageManager, DeleteFirstRecord)
 
     auto entries = manager.load_records();
 
-    ASSERT_EQ(record_2.recordID, entries.front().recordID);
+    ASSERT_EQ(record_2.recordId, entries.front().recordId);
 }
 
 TEST(SelStorageManager, DeleteLastRecord)
 {
     SelStorageManager manager(path / fileName);
+    manager.clear_storage();
 
     SelEventRecord record_1{1};
     SelEventRecord record_2{2};
@@ -65,12 +67,13 @@ TEST(SelStorageManager, DeleteLastRecord)
 
     auto entries = manager.load_records();
 
-    ASSERT_EQ(record_2.recordID, entries.front().recordID);
+    ASSERT_EQ(record_1.recordId, entries.front().recordId);
 }
 
 TEST(SelStorageManager, DeleteRecordById)
 {
     SelStorageManager manager(path / fileName);
+    manager.clear_storage();
 
     SelEventRecord record_1{1};
     SelEventRecord record_2{2};
@@ -84,13 +87,14 @@ TEST(SelStorageManager, DeleteRecordById)
 
     auto entries = manager.load_records();
 
-    ASSERT_EQ(record_1.recordID, entries.front().recordID);
-    ASSERT_EQ(record_3.recordID, entries.back().recordID);
+    ASSERT_EQ(record_1.recordId, entries.front().recordId);
+    ASSERT_EQ(record_3.recordId, entries.back().recordId);
 }
 
 TEST(SelStorageManager, GetFirstRecord)
 {
     SelStorageManager manager(path / fileName);
+    manager.clear_storage();
 
     SelEventRecord record_1{1};
     SelEventRecord record_2{2};
@@ -102,12 +106,13 @@ TEST(SelStorageManager, GetFirstRecord)
 
     auto record = manager.get_record(ipmi::sel::firstEntry);
 
-    ASSERT_EQ(record.recordID, record_1.recordID);
+    ASSERT_EQ(record.recordId, record_1.recordId);
 }
 
 TEST(SelStorageManager, GetLastRecord)
 {
     SelStorageManager manager(path / fileName);
+    manager.clear_storage();
 
     SelEventRecord record_1{1};
     SelEventRecord record_2{2};
@@ -117,12 +122,13 @@ TEST(SelStorageManager, GetLastRecord)
 
     auto record = manager.get_record(ipmi::sel::lastEntry);
 
-    ASSERT_EQ(record.recordID, record_2.recordID);
+    ASSERT_EQ(record.recordId, record_2.recordId);
 }
 
 TEST(SelStorageManager, GetRecordById)
 {
     SelStorageManager manager(path / fileName);
+    manager.clear_storage();
 
     SelEventRecord record_1{1};
     SelEventRecord record_2{2};
@@ -134,5 +140,22 @@ TEST(SelStorageManager, GetRecordById)
 
     auto record = manager.get_record(2);
 
-    ASSERT_EQ(record.recordID, record_2.recordID);
+    ASSERT_EQ(record.recordId, record_2.recordId);
+}
+
+TEST(SelStorageManager, CountEntries)
+{
+    SelStorageManager manager(path / fileName);
+    manager.clear_storage();
+
+    static constexpr auto count = 3;
+
+    SelEventRecord record{1};
+
+    for (int i = 0; i < count; ++i)
+        manager.add_record(record);
+
+    auto sel_count = manager.get_records_count();
+
+    ASSERT_EQ(sel_count, count);
 }

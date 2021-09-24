@@ -5,10 +5,10 @@
 
 struct SelEventRecord
 {
-    uint16_t recordID;                //!< Record ID.
+    uint16_t recordId;                //!< Record ID.
     uint8_t recordType;               //!< Record Type.
     uint32_t timeStamp;               //!< Timestamp.
-    uint16_t generatorID;             //!< Generator ID.
+    uint16_t generatorId;             //!< Generator ID.
     uint8_t eventMsgRevision;         //!< Event Message Revision.
     uint8_t sensorType;               //!< Sensor Type.
     uint8_t sensorNum;                //!< Sensor Number.
